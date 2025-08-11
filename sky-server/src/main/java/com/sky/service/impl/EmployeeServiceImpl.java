@@ -9,6 +9,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
@@ -24,6 +25,7 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.*;
 
@@ -132,5 +134,59 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     }
+    /**
+     * 根据ID查询员工
+     * @param id
+     * @return
+     */
+
+    @Override
+    public Employee getById(Long id) {
+        Employee employee=employeeMapper.getById(id);
+        employee.setPassword("****");
+        return employee;
+    }
+
+    /**
+     * 修改员工
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {//由于动态SQL需要employee对象 所以进行属性拷贝
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 修改密码
+     * @param passwordEditDTO
+     */
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+        String oldPassword = passwordEditDTO.getOldPassword();
+        String newPassword = passwordEditDTO.getNewPassword();
+
+//获取员工ID
+        Long empId=BaseContext.getCurrentId();
+        //根据id查询员工信息
+        Employee employee = employeeMapper.getById(empId);
+        //密码比对
+        String encryptedOldPassword = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        if (!encryptedOldPassword.equals(employee.getPassword())){
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        //更新密码
+        String encryptedNewPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        employee.setPassword(encryptedNewPassword);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(empId);
+        employeeMapper.update(employee);
+    }
+
 
 }
