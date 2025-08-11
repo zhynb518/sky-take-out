@@ -93,4 +93,18 @@ public class EmployeeController {
     return Result.success(pageResult);
     }
 
+    /**
+     * 启用禁用员工账号
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status,Long id){//接收前端两个参数
+    log.info("启用禁用员工账号：{}，{}",status,id);
+    employeeService.startOrStop(status,id);//接收后将参数传到方法里
+        return Result.success();
+    }
+
+
 }
