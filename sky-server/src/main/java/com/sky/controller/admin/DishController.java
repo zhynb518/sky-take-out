@@ -28,6 +28,7 @@ public class DishController {
     log.info("新增菜品：{}",dishDTO);
     dishService.saveWithFlavor(dishDTO);
     return Result.success();
+
     }
 
 }
