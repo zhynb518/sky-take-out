@@ -1,10 +1,21 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
+import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface SetmealMapper {
+    /**
+     * 新增套餐，同时需要保存套餐和菜品的关联关系
+     * @param setmeal
+     */
+@AutoFill(value = OperationType.INSERT)
+    static void insert(Setmeal setmeal) {
+    }
 
     /**
      * 根据分类id查询套餐的数量
