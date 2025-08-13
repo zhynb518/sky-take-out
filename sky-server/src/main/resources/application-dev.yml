@@ -6,3 +6,10 @@ sky:
     database: sky_take_out
     username: root
     password: zhy20040518
+
+  alioss:
+    endpoint: oss-cn-chengdu-aliyuncs.com
+    access-key-id: LTAI5tJNNf1QNLE6voiAezYS
+    access-key-secret: npJcLrc3cNx8lq0AnHXlr7sqi4aOQe
+    bucket-name: it-zhy
+
