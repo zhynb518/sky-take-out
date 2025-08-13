@@ -14,8 +14,7 @@ public interface SetmealMapper {
      * @param setmeal
      */
 @AutoFill(value = OperationType.INSERT)
-    static void insert(Setmeal setmeal) {
-    }
+         void insert(Setmeal setmeal);
 
     /**
      * 根据分类id查询套餐的数量
