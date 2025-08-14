@@ -8,4 +8,37 @@
          #{createUser}, #{updateUser})
 
     </insert>
+    <update id="update">
+        update setmeal
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+    </update>
+    <select id="pageQuery" resultType="com.sky.entity.Setmeal">
+        select
+        s.*,c.name categoryName
+        from
+        setmeal s
+        left join
+        category c
+        on
+        s.category_id = c.id
+        <where>
+            <if test="name != null">
+                and s.name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+        </where>
+        order by s.create_time desc
+    </select>
 </mapper>
